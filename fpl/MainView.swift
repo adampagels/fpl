@@ -1,14 +1,14 @@
 //
-//  ContentView.swift
+//  MainView.swift
 //  fpl
 //
 //  Created by Adam Pagels on 2025-09-11.
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 
-struct ContentView: View {
+struct MainView: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var items: [Item]
 

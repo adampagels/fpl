@@ -5,8 +5,8 @@
 //  Created by Adam Pagels on 2025-09-11.
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 @main
 struct fplApp: App {
@@ -25,7 +25,7 @@ struct fplApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            MainView()
         }
         .modelContainer(sharedModelContainer)
     }
