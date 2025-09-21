@@ -25,7 +25,7 @@ struct fplApp: App {
 
     var body: some Scene {
         WindowGroup {
-            MainView()
+            MainTabView()
         }
         .modelContainer(sharedModelContainer)
     }

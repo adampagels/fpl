@@ -56,6 +56,6 @@ struct MainView: View {
 }
 
 #Preview {
-    ContentView()
+    MainView()
         .modelContainer(for: Item.self, inMemory: true)
 }
