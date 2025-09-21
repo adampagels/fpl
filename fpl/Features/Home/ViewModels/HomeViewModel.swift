@@ -7,21 +7,6 @@
 
 import Foundation
 
-struct TeamPlayer: Identifiable {
-    let pick: Pick
-    let player: Player
-
-    var id: Int { pick.element }
-    var isOnBench: Bool { pick.position > 11 }
-}
-
-enum HomeViewState {
-    case idle
-    case loading
-    case loaded(entryHistory: EntryHistory, teamPlayers: [TeamPlayer])
-    case error(String)
-}
-
 @Observable
 class HomeViewModel {
     private let apiService: FPLAPIService
