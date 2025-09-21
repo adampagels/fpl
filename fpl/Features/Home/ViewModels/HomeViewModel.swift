@@ -7,20 +7,50 @@
 
 import Foundation
 
+struct TeamPlayer: Identifiable {
+    let pick: Pick
+    let player: Player
+
+    var id: Int { pick.element }
+    var isOnBench: Bool { pick.position > 11 }
+}
+
+enum HomeViewState {
+    case idle
+    case loading
+    case loaded(entryHistory: EntryHistory, teamPlayers: [TeamPlayer])
+    case error(String)
+}
+
 @Observable
 class HomeViewModel {
     private let apiService: FPLAPIService
+    var state: HomeViewState = .idle
 
     init(apiService: FPLAPIService) {
         self.apiService = apiService
     }
 
-    func loadTeamPicks() async {
+    func loadTeam(teamId: Int, eventId: Int) async {
+        state = .loading
+
         do {
-            let response = try await apiService.fetchPicks(teamId: 4_436_644, eventId: 5)
-            print(response)
+            async let picksResponse = apiService.fetchPicks(teamId: teamId, eventId: eventId)
+            async let bootstrapResponse = apiService.fetchBootstrap()
+
+            let (picks, bootstrap) = try await (picksResponse, bootstrapResponse)
+
+            let playersById = Dictionary(uniqueKeysWithValues: bootstrap.elements.map { ($0.id, $0) })
+
+            let teamPlayers: [TeamPlayer] = picks.picks.compactMap { pick in
+                guard let player = playersById[pick.element] else { return nil }
+                return TeamPlayer(pick: pick, player: player)
+            }
+
+            state = .loaded(entryHistory: picks.entryHistory, teamPlayers: teamPlayers)
         } catch {
-            print("error")
+            print("error", error)
+            state = .error("Failed to load team: \(error.localizedDescription)")
         }
     }
 }
