@@ -20,6 +20,9 @@ struct MainTabView: View {
             Tab("Home", systemImage: "house") {
                 HomeView(viewModel: homeViewModel)
             }
+            Tab("Competitions", systemImage: "trophy") {
+                CompetitionsView()
+            }
         }
     }
 }
