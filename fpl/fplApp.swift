@@ -10,6 +10,9 @@ import SwiftUI
 
 @main
 struct fplApp: App {
+    @State private var homeViewModel = HomeViewModel(apiService: FPLAPIService())
+    @State private var competitionsViewModel = CompetitionsViewModel(apiService: FPLAPIService())
+
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
             Item.self,
@@ -26,6 +29,8 @@ struct fplApp: App {
     var body: some Scene {
         WindowGroup {
             MainTabView()
+                .environment(homeViewModel)
+                .environment(competitionsViewModel)
         }
         .modelContainer(sharedModelContainer)
     }

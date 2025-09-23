@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct HomeView: View {
-    var viewModel: HomeViewModel
+    @Environment(HomeViewModel.self) private var viewModel
 
     var body: some View {
         Group {
@@ -42,5 +42,6 @@ struct HomeView: View {
 }
 
 #Preview {
-    HomeView(viewModel: HomeViewModel(apiService: FPLAPIService()))
+    HomeView()
+        .environment(HomeViewModel(apiService: FPLAPIService()))
 }

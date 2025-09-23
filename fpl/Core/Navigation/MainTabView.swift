@@ -8,17 +8,10 @@
 import SwiftUI
 
 struct MainTabView: View {
-    private let apiService = FPLAPIService()
-    private var homeViewModel: HomeViewModel
-
-    init() {
-        homeViewModel = HomeViewModel(apiService: apiService)
-    }
-
     var body: some View {
         TabView {
             Tab("Home", systemImage: "house") {
-                HomeView(viewModel: homeViewModel)
+                HomeView()
             }
             Tab("Competitions", systemImage: "trophy") {
                 CompetitionsView()
@@ -29,4 +22,6 @@ struct MainTabView: View {
 
 #Preview {
     MainTabView()
+        .environment(HomeViewModel(apiService: FPLAPIService()))
+        .environment(CompetitionsViewModel(apiService: FPLAPIService()))
 }

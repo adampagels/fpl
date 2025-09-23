@@ -34,4 +34,13 @@ class FPLAPIService {
         cachedBootstrap = bootstrap
         return bootstrap
     }
+    
+    func fetchEntryInfo(teamId: Int) async throws -> FPLEntry {
+        let url = baseURL.appendingPathComponent("entry/\(teamId)")
+        let (data, _) = try await URLSession.shared.data(from: url)
+        let response = try JSONDecoder().decode(FPLEntry.self, from: data)
+        return response
+    }
 }
+
+
