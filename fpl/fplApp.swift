@@ -8,10 +8,27 @@
 import SwiftData
 import SwiftUI
 
+private struct APIServiceKey: EnvironmentKey {
+    static let defaultValue: FPLAPIService = FPLAPIService()
+}
+
+extension EnvironmentValues {
+    var apiService: FPLAPIService {
+        get { self[APIServiceKey.self] }
+        set { self[APIServiceKey.self] = newValue }
+    }
+}
+
 @main
 struct fplApp: App {
-    @State private var homeViewModel = HomeViewModel(apiService: FPLAPIService())
-    @State private var competitionsViewModel = CompetitionsViewModel(apiService: FPLAPIService())
+    private let apiService = FPLAPIService()
+    @State private var homeViewModel: HomeViewModel
+    @State private var competitionsViewModel: CompetitionsViewModel
+
+    init() {
+        _homeViewModel = State(wrappedValue: HomeViewModel(apiService: apiService))
+        _competitionsViewModel = State(wrappedValue: CompetitionsViewModel(apiService: apiService))
+    }
 
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
@@ -31,6 +48,7 @@ struct fplApp: App {
             MainTabView()
                 .environment(homeViewModel)
                 .environment(competitionsViewModel)
+                .environment(\.apiService, apiService)
         }
         .modelContainer(sharedModelContainer)
     }

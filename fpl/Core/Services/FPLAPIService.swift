@@ -34,13 +34,22 @@ class FPLAPIService {
         cachedBootstrap = bootstrap
         return bootstrap
     }
-    
+
     func fetchEntryInfo(teamId: Int) async throws -> FPLEntry {
         let url = baseURL.appendingPathComponent("entry/\(teamId)")
         let (data, _) = try await URLSession.shared.data(from: url)
         let response = try JSONDecoder().decode(FPLEntry.self, from: data)
         return response
     }
+
+    func fetchLeagueDetails(leagueId: Int) async throws -> StandingsResponse {
+        let url = baseURL
+            .appendingPathComponent(
+                "leagues-classic/\(leagueId)/standings"
+            )
+        print(url)
+        let (data, _) = try await URLSession.shared.data(from: url)
+        let response = try JSONDecoder().decode(StandingsResponse.self, from: data)
+        return response
+    }
 }
-
-

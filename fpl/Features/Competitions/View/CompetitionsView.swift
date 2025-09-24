@@ -9,27 +9,35 @@ import SwiftUI
 
 struct CompetitionsView: View {
     @Environment(CompetitionsViewModel.self) private var viewModel
+    @Environment(\.apiService) private var apiService
 
     var body: some View {
-        Group {
-            switch viewModel.state {
-            case .idle:
-                Text("Welcome! Load your entry info.")
-            case .loading:
-                ProgressView("Loading entry info…")
-            case let .error(message):
-                Text("Error: \(message)").foregroundColor(.red)
-            case let .loaded(entryInfo):
-                VStack(alignment: .leading) {
-                    Text("GW Points: \(entryInfo.summaryEventPoints)")
+        NavigationStack {
+            Group {
+                switch viewModel.state {
+                case .idle:
+                    Text("Welcome! Load your entry info.")
+                case .loading:
+                    ProgressView("Loading entry info…")
+                case let .error(message):
+                    Text("Error: \(message)").foregroundColor(.red)
+                case let .loaded(entryInfo):
+                    VStack(alignment: .leading) {
+                        Text("GW Points: \(entryInfo.summaryEventPoints)")
 //                    Text("Total Points: \(entryHistory.totalPoints)")
 //                    Text("Overall Rank: \(entryHistory.overallRank)")
-
-                    List(entryInfo.leagues.classic) { league in
-                        HStack {
-                            Text(league.name)
-                            Spacer()
-                            Text(String(league.entryRank))
+                        List(entryInfo.leagues.classic) { league in
+                            NavigationLink(destination: CompetitionDetailView(
+                                leagueName: league.name,
+                                leagueId: league.id,
+                                viewModel: CompetitionDetailViewModel(apiService: apiService)
+                            )) {
+                                HStack {
+                                    Text(league.name)
+                                    Spacer()
+                                    Text(String(league.entryRank))
+                                }
+                            }
                         }
                     }
                 }
