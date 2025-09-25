@@ -10,6 +10,7 @@ import Foundation
 struct TeamPlayer: Identifiable {
     let pick: Pick
     let player: Player
+    let liveStats: Element
 
     var id: Int { pick.element }
     var isOnBench: Bool { pick.position > 11 }

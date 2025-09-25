@@ -47,9 +47,15 @@ class FPLAPIService {
             .appendingPathComponent(
                 "leagues-classic/\(leagueId)/standings"
             )
-        print(url)
         let (data, _) = try await URLSession.shared.data(from: url)
         let response = try JSONDecoder().decode(StandingsResponse.self, from: data)
+        return response
+    }
+
+    func fetchliveData(eventId: Int) async throws -> LiveDataResponse {
+        let url = baseURL.appendingPathComponent("event/\(eventId)/live/")
+        let (data, _) = try await URLSession.shared.data(from: url)
+        let response = try JSONDecoder().decode(LiveDataResponse.self, from: data)
         return response
     }
 }

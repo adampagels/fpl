@@ -22,14 +22,15 @@ class HomeViewModel {
         do {
             async let picksResponse = apiService.fetchPicks(teamId: teamId, eventId: eventId)
             async let bootstrapResponse = apiService.fetchBootstrap()
-
-            let (picks, bootstrap) = try await (picksResponse, bootstrapResponse)
+            async let liveTeamResponse = apiService.fetchliveData(eventId: eventId)
+            let (picks, bootstrap, liveTeamData) = try await (picksResponse, bootstrapResponse, liveTeamResponse)
 
             let playersById = Dictionary(uniqueKeysWithValues: bootstrap.elements.map { ($0.id, $0) })
-
             let teamPlayers: [TeamPlayer] = picks.picks.compactMap { pick in
                 guard let player = playersById[pick.element] else { return nil }
-                return TeamPlayer(pick: pick, player: player)
+                guard let liveStats = liveTeamData.elements.first(where: { $0.id == player.id }) else { return nil }
+
+                return TeamPlayer(pick: pick, player: player, liveStats: liveStats)
             }
 
             state = .loaded(entryHistory: picks.entryHistory, teamPlayers: teamPlayers)

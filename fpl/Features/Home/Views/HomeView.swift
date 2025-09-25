@@ -29,6 +29,7 @@ struct HomeView: View {
                         HStack {
                             Text(tp.player.webName)
                             Spacer()
+                            Text(String(tp.liveStats.stats.totalPoints))
                             Text(tp.isOnBench ? "Bench" : "Starter")
                         }
                     }
