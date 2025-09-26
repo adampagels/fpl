@@ -198,7 +198,6 @@ struct FPLEntry: Codable, Identifiable {
     let id: Int
     let joinedTime: String
     let startedEvent: Int
-    let favouriteTeam: Int
     let playerFirstName: String
     let playerLastName: String
     let playerRegionId: Int
@@ -225,7 +224,6 @@ struct FPLEntry: Codable, Identifiable {
         case id, name, leagues, kit
         case joinedTime = "joined_time"
         case startedEvent = "started_event"
-        case favouriteTeam = "favourite_team"
         case playerFirstName = "player_first_name"
         case playerLastName = "player_last_name"
         case playerRegionId = "player_region_id"

@@ -21,7 +21,11 @@ struct MainTabView: View {
 }
 
 #Preview {
+    let apiService = FPLAPIService()
+    let entryStore = EntryStore(apiService: apiService)
+
     MainTabView()
-        .environment(HomeViewModel(apiService: FPLAPIService()))
-        .environment(CompetitionsViewModel(apiService: FPLAPIService()))
+        .environment(entryStore)
+        .environment(HomeViewModel(apiService: apiService, entryStore: entryStore))
+        .environment(CompetitionsViewModel(entryStore: entryStore))
 }

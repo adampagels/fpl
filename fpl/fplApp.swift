@@ -9,7 +9,7 @@ import SwiftData
 import SwiftUI
 
 private struct APIServiceKey: EnvironmentKey {
-    static let defaultValue: FPLAPIService = FPLAPIService()
+    static let defaultValue: FPLAPIService = .init()
 }
 
 extension EnvironmentValues {
@@ -24,32 +24,27 @@ struct fplApp: App {
     private let apiService = FPLAPIService()
     @State private var homeViewModel: HomeViewModel
     @State private var competitionsViewModel: CompetitionsViewModel
+    @State private var entryStore: EntryStore
 
     init() {
-        _homeViewModel = State(wrappedValue: HomeViewModel(apiService: apiService))
-        _competitionsViewModel = State(wrappedValue: CompetitionsViewModel(apiService: apiService))
+        let apiService = FPLAPIService()
+        let store = EntryStore(apiService: apiService)
+        _entryStore = State(wrappedValue: store)
+
+        _homeViewModel = State(wrappedValue: HomeViewModel(apiService: apiService, entryStore: store))
+        _competitionsViewModel = State(wrappedValue: CompetitionsViewModel(entryStore: store))
     }
-
-    var sharedModelContainer: ModelContainer = {
-        let schema = Schema([
-            Item.self,
-        ])
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
-
-        do {
-            return try ModelContainer(for: schema, configurations: [modelConfiguration])
-        } catch {
-            fatalError("Could not create ModelContainer: \(error)")
-        }
-    }()
 
     var body: some Scene {
         WindowGroup {
             MainTabView()
                 .environment(homeViewModel)
                 .environment(competitionsViewModel)
+                .environment(entryStore)
                 .environment(\.apiService, apiService)
+                .task {
+                    await entryStore.loadEntry(teamId: 4_436_644)
+                }
         }
-        .modelContainer(sharedModelContainer)
     }
 }

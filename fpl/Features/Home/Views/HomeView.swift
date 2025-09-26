@@ -21,6 +21,7 @@ struct HomeView: View {
                 Text("Error: \(message)").foregroundColor(.red)
             case let .loaded(entryHistory, teamPlayers):
                 VStack(alignment: .leading) {
+                    Text("Gameweek: \(viewModel.currentEvent)")
                     Text("GW Points: \(entryHistory.points)")
                     Text("Total Points: \(entryHistory.totalPoints)")
                     Text("Overall Rank: \(entryHistory.overallRank)")
@@ -36,13 +37,13 @@ struct HomeView: View {
                 }
             }
         }
-        .task {
-            await viewModel.loadTeam(teamId: 4_436_644, eventId: 5)
+        .task(id: viewModel.currentEvent) {
+            await viewModel.loadTeam(teamId: 4_436_644)
         }
     }
 }
 
 #Preview {
     HomeView()
-        .environment(HomeViewModel(apiService: FPLAPIService()))
+        .environment(HomeViewModel(apiService: FPLAPIService(), entryStore: EntryStore(apiService: FPLAPIService())))
 }
