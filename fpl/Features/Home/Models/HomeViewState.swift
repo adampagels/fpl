@@ -10,6 +10,12 @@ import Foundation
 enum HomeViewState {
     case idle
     case loading
-    case loaded(entryHistory: EntryHistory, teamPlayers: [TeamPlayer])
+    case loaded(LoadedState)
     case error(String)
+}
+
+struct LoadedState {
+    let entryHistory: EntryHistory
+    let teamPlayers: [TeamPlayer]
+    var isRefreshing: Bool = false
 }

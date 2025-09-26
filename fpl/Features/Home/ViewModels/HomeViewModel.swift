@@ -20,10 +20,23 @@ class HomeViewModel {
         self.entryStore = entryStore
     }
 
-    func loadTeam(teamId: Int) async {
-        print("runs")
+    func loadTeam(teamId: Int, isRefreshing: Bool) async {
         guard currentEvent > 0 else { return }
-        state = .loading
+
+        switch state {
+        case let .loaded(loaded):
+            if isRefreshing {
+                state = .loaded(LoadedState(
+                    entryHistory: loaded.entryHistory,
+                    teamPlayers: loaded.teamPlayers,
+                    isRefreshing: true
+                ))
+            } else {
+                state = .loading
+            }
+        default:
+            state = isRefreshing ? state : .loading
+        }
 
         do {
             async let picksResponse = apiService.fetchPicks(teamId: teamId, eventId: currentEvent)
@@ -37,8 +50,12 @@ class HomeViewModel {
                 guard let liveStats = liveTeamData.elements.first(where: { $0.id == player.id }) else { return nil }
                 return TeamPlayer(pick: pick, player: player, liveStats: liveStats)
             }
-
-            state = .loaded(entryHistory: picks.entryHistory, teamPlayers: teamPlayers)
+            print(liveTeamData)
+            state = .loaded(LoadedState(
+                entryHistory: picks.entryHistory,
+                teamPlayers: teamPlayers,
+                isRefreshing: false
+            ))
         } catch {
             print("error", error)
             state = .error("Failed to load team: \(error.localizedDescription)")
