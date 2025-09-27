@@ -20,8 +20,10 @@ struct LoadedState {
     var isRefreshing: Bool = false
 
     var totalLiveTeamPoints: Int {
-        teamPlayers.reduce(0) {
-            $0 + $1.liveStats.stats.totalPoints
-        }
+        teamPlayers
+            .filter { !$0.isOnBench }
+            .reduce(0) {
+                $0 + ($1.effectivePoints)
+            }
     }
 }

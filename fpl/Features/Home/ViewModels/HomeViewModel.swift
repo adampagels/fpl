@@ -50,7 +50,7 @@ class HomeViewModel {
                 guard let liveStats = liveTeamData.elements.first(where: { $0.id == player.id }) else { return nil }
                 return TeamPlayer(pick: pick, player: player, liveStats: liveStats)
             }
-            print(liveTeamData)
+
             state = .loaded(LoadedState(
                 entryHistory: picks.entryHistory,
                 teamPlayers: teamPlayers,

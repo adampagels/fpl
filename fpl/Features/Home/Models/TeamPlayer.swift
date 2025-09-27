@@ -16,4 +16,12 @@ struct TeamPlayer: Identifiable {
     var isOnBench: Bool { pick.position > 11 }
     var isCaptain: Bool { pick.isCaptain }
     var isViceCaptain: Bool { pick.isViceCaptain }
+
+    var effectivePoints: Int {
+        if isOnBench {
+            liveStats.stats.totalPoints
+        } else {
+            liveStats.stats.totalPoints * pick.multiplier
+        }
+    }
 }
