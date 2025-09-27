@@ -18,4 +18,10 @@ struct LoadedState {
     let entryHistory: EntryHistory
     let teamPlayers: [TeamPlayer]
     var isRefreshing: Bool = false
+
+    var totalLiveTeamPoints: Int {
+        teamPlayers.reduce(0) {
+            $0 + $1.liveStats.stats.totalPoints
+        }
+    }
 }

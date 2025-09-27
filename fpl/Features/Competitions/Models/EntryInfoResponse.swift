@@ -208,7 +208,7 @@ struct FPLEntry: Codable, Identifiable {
     let summaryOverallPoints: Int
     let summaryOverallRank: Int
     let summaryEventPoints: Int
-    let summaryEventRank: Int
+    let summaryEventRank: Int?
     let currentEvent: Int
     let leagues: Leagues
     let name: String
@@ -262,8 +262,12 @@ extension FPLEntry {
         summaryOverallRank.formatted(.number)
     }
 
-    var formattedEventRank: String {
-        summaryEventRank.formatted(.number)
+    var formattedEventRank: String? {
+        if let summaryEventRank {
+            summaryEventRank.formatted(.number)
+        } else {
+            String(0)
+        }
     }
 
     var hasClassicLeagues: Bool {

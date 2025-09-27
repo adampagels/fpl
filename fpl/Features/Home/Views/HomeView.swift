@@ -22,7 +22,7 @@ struct HomeView: View {
             case let .loaded(loaded):
                 VStack(alignment: .leading) {
                     Text("Gameweek: \(viewModel.currentEvent)")
-                    Text("GW Points: \(loaded.entryHistory.points)")
+                    Text("GW Points: \(loaded.totalLiveTeamPoints)")
                     Text("Total Points: \(loaded.entryHistory.totalPoints)")
                     Text("Overall Rank: \(loaded.entryHistory.overallRank)")
 
@@ -34,6 +34,7 @@ struct HomeView: View {
                             Text(tp.isOnBench ? "Bench" : "Starter")
                         }
                     }
+                    .scrollIndicators(.hidden)
                     .refreshable {
                         await viewModel.loadTeam(teamId: 4_436_644, isRefreshing: true)
                     }
