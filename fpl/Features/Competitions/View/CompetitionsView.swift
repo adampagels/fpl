@@ -27,6 +27,17 @@ struct CompetitionsView: View {
                             Text(league.name)
                             Spacer()
                             Text(String(league.entryRank))
+                            switch league.rankMovement {
+                            case .up:
+                                Image(systemName: "arrow.up.circle.fill")
+                                    .foregroundStyle(.green)
+                            case .down:
+                                Image(systemName: "arrow.down.circle.fill")
+                                    .foregroundStyle(.red)
+                            case .same:
+                                Image(systemName: "minus.circle.fill")
+                                    .foregroundStyle(.gray)
+                            }
                         }
                     }
                 }
