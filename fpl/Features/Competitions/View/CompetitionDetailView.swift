@@ -37,6 +37,17 @@ struct CompetitionDetailView: View {
                             Spacer()
                             Text(String(team.eventTotal))
                             Text(String(team.total))
+                            switch team.rankMovement {
+                            case .up:
+                                Image(systemName: "arrow.up.circle.fill")
+                                    .foregroundStyle(.green)
+                            case .down:
+                                Image(systemName: "arrow.down.circle.fill")
+                                    .foregroundStyle(.red)
+                            case .same:
+                                Image(systemName: "minus.circle.fill")
+                                    .foregroundStyle(.gray)
+                            }
                         }
                     }
                 }

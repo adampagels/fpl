@@ -28,10 +28,6 @@ struct ActivePhase: Codable, Identifiable {
     }
 }
 
-enum RankMovement {
-    case up, down, same
-}
-
 struct ClassicLeague: Codable, Identifiable {
     let id: Int
     let name: String
@@ -57,13 +53,7 @@ struct ClassicLeague: Codable, Identifiable {
     let entryLastRank: Int
 
     var rankMovement: RankMovement {
-        if entryLastRank > entryRank {
-            return .up
-        } else if entryLastRank < entryRank {
-            return .down
-        } else {
-            return .same
-        }
+        getRankMovement(previousRank: entryLastRank, currentRank: entryRank)
     }
 
     enum CodingKeys: String, CodingKey {

@@ -62,6 +62,10 @@ struct StandingEntry: Codable, Identifiable {
     let entryName: String
     let hasPlayed: Bool
 
+    var rankMovement: RankMovement {
+        getRankMovement(previousRank: lastRank, currentRank: rank)
+    }
+
     enum CodingKeys: String, CodingKey {
         case id, entry, total, rank, lastRank = "last_rank", rankSort = "rank_sort"
         case eventTotal = "event_total"
